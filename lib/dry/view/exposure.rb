@@ -31,6 +31,10 @@ module Dry
         options.fetch(:private) { false }
       end
 
+      def default_value
+        options[:default]
+      end
+
       def call(input, locals = {})
         return input[name] unless proc
 
