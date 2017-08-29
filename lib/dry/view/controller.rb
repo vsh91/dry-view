@@ -21,6 +21,7 @@ module Dry
       setting :paths
       setting :layout, false
       setting :template
+      setting :default_encoding, 'utf-8'
       setting :default_format, :html
       setting :context, DEFAULT_CONTEXT
       setting :decorator, Decorator.new
@@ -37,9 +38,9 @@ module Dry
       end
 
       # @api private
-      def self.renderer(format)
+      def self.renderer(encoding, format)
         renderers.fetch(format) {
-          renderers[format] = Renderer.new(paths, format: format)
+          renderers[format] = Renderer.new(paths, encoding: encoding, format: format)
         }
       end
 
@@ -79,8 +80,8 @@ module Dry
       end
 
       # @api public
-      def call(format: config.default_format, context: config.context, **input)
-        renderer = self.class.renderer(format)
+      def call(encoding: config.default_encoding, format: config.default_format, context: config.context, **input)
+        renderer = self.class.renderer(encoding, format)
 
         template_content = renderer.(template_path, template_scope(renderer, context, input))
 

@@ -3,7 +3,7 @@ require 'dry/view/renderer'
 
 RSpec.describe Dry::View::Renderer do
   subject(:renderer) do
-    Dry::View::Renderer.new([Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))], format: 'html')
+    Dry::View::Renderer.new([Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))], encoding: 'utf-8', format: 'html')
   end
 
   let(:scope) { double(:scope) }

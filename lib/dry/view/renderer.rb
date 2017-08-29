@@ -8,14 +8,15 @@ module Dry
 
       TemplateNotFoundError = Class.new(StandardError)
 
-      attr_reader :paths, :format, :engine, :tilts
+      attr_reader :paths, :encoding, :format, :engine, :tilts
 
       def self.tilts
         @__engines__ ||= {}
       end
 
-      def initialize(paths, format:)
+      def initialize(paths, encoding:, format:)
         @paths = paths
+        @encoding = encoding
         @format = format
         @tilts = self.class.tilts
       end
@@ -38,7 +39,7 @@ module Dry
       def chdir(dirname)
         new_paths = paths.map { |path| path.chdir(dirname) }
 
-        self.class.new(new_paths, format: format)
+        self.class.new(new_paths, encoding: encoding, format: format)
       end
 
       def lookup(name)
@@ -49,10 +50,9 @@ module Dry
 
       private
 
-      # TODO: make default_encoding configurable
       def tilt(path)
         tilts.fetch(path) {
-          tilts[path] = Tilt.new(path, nil, default_encoding: "utf-8")
+          tilts[path] = Tilt.new(path, nil, default_encoding: encoding)
         }
       end
     end
