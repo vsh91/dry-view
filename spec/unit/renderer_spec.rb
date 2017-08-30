@@ -26,5 +26,10 @@ RSpec.describe Dry::View::Renderer do
         renderer.('not_found', scope)
       }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /not_found/)
     end
+
+    it 'allows to specify encoding' do
+      renderer = Dry::View::Renderer.new([Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))], encoding: Encoding::ISO_8859_1.name, format: 'html')
+      expect(renderer.('welcome', scope).encoding).to eq(Encoding::ISO_8859_1)
+    end
   end
 end
